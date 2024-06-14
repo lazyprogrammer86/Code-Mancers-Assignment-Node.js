@@ -1,19 +1,62 @@
-import path from "path";
-
-const express = require('express');
-require('dotenv').config({path: './server.properties'});
+import express from 'express';
+import dotenv from 'dotenv';
+import http from 'http';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.listen(process.env.PORT, (error: any) => {
-    if(error){
-        console.log('Error while starting the server on port ' + process.env.PORT);
-        console.log(error);
+/**global variables */
+global.mongodbConnection = null;
+global.redisConnection = null;
+
+async function initialize(): Promise<void>{
+    // env variables
+    dotenv.config({path: './server.properties'});
+    
+    /**Initialize mongo db connection */
+    const {connect: mongoConnection} = require('./db/mongodb/connection');
+    let mongoConnected: Boolean = await mongoConnection();
+    if(!mongoConnected){
+        console.log('Server can not be started, due to error in mongo db connection');
+        process.exit(1);
+    }
+    
+    /**Initialize redis connection */
+    const {connect: redisConnection} = require('./db/redis/connection');
+    let redisConnected: Boolean = await redisConnection();
+    if(!redisConnected){
+        console.log('Server can not be started, due to error in redis connection');
         process.exit(1);
     }
 
-    console.log('Server Up and Running on port '+ process.env.PORT);
-})
+    return;
+}
+
+let server: http.Server | null  = null;
+
+async function startServer(): Promise<void> {
+    try{
+        await initialize();
+        server = http.createServer(app).listen(process.env.PORT);
+        console.log(`Server Up and Running on Port ${process.env.PORT}`);
+    }catch(error){
+        console.log(`Error while starting server`);
+        console.log(error);
+        process.exit(1);
+    }
+}
+
+startServer();
+
+function stopServer(): void {
+    console.log('Server close signal recieved');
+    if(server){
+        server.close();
+        console.log('Server Closed successfully');
+    }
+}
+
+process.on('SIGINT', stopServer);
+process.on('SIGTERM', stopServer);
