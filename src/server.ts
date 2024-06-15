@@ -1,6 +1,8 @@
-import express from 'express';
+import express, { Request, Response, Router } from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
+import { authAPI } from './api/authAPI';
+import { notFound } from './middleware/notFound';
 
 const app = express();
 
@@ -10,6 +12,25 @@ app.use(express.urlencoded({extended: true}));
 /**global variables */
 global.mongodbConnection = null;
 global.redisConnection = null;
+
+/**Welcome route */
+app.get('/', (req: Request, res: Response) : void => {
+    res.status(200).send({msg: 'Welcome to the E - Commerce Server'});
+    return;
+});
+
+/**Routes Inclusion */
+const protectedRoutes: Router[] = [];
+const unProtectedRoutes: Router[] = [authAPI];
+app.use('/auth', unProtectedRoutes);
+
+/**Auth middleware goes here*/
+
+
+// app.use('/api', protectedRoutes);
+
+/**Undeclared routes handler 404 */
+app.use(notFound);
 
 async function initialize(): Promise<void>{
     // env variables
