@@ -23,3 +23,14 @@ export function createToken(doc: tokenInfo): functionResponse {
         return {code : -1, msg: 'Failed', info: error.message};
     }
 }
+
+export function verifyToken(token: string): functionResponse {
+    try{
+        let tokenInfo = jwt.verify(token, TOKEN_SECRET);
+        return {code : 1, msg: 'Success', info: tokenInfo};
+    }catch(error: any){ 
+        console.log('Error while verifying token');
+        console.log(error);
+        return {code : -1, msg: 'Failed', info: error.message};
+    }
+}
