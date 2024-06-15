@@ -9,3 +9,11 @@ interface functionResponse {
     msg: string
     info?: any
 }
+
+interface productBody{
+    productId: string
+    image: string
+    title: string
+    description: string
+    price: number
+}

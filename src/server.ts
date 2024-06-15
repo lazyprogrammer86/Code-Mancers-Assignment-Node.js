@@ -2,7 +2,9 @@ import express, { Request, Response, Router } from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
 import { authAPI } from './api/authAPI';
+import { produtctAPI } from './api/products';
 import { notFound } from './middleware/notFound';
+import { handleAuth } from './middleware/authHandler';
 
 const app = express();
 
@@ -20,14 +22,17 @@ app.get('/', (req: Request, res: Response) : void => {
 });
 
 /**Routes Inclusion */
-const protectedRoutes: Router[] = [];
+const protectedRoutes: Router[] = [produtctAPI];
 const unProtectedRoutes: Router[] = [authAPI];
+
+/**Unprotected routes */
 app.use('/auth', unProtectedRoutes);
 
 /**Auth middleware goes here*/
+app.use(handleAuth);
 
-
-// app.use('/api', protectedRoutes);
+/**Auth Protected routes */
+app.use('/api', protectedRoutes);
 
 /**Undeclared routes handler 404 */
 app.use(notFound);

@@ -23,3 +23,14 @@ export function handleAuth(req: Request, res: Response, next: NextFunction): Res
         handleError(req, res, next, error);
     }
 }
+
+export function adminHandle(req: Request, res: Response, next: NextFunction): Response | void {
+    try{
+        if(req.authInfo?.isAdmin) next();
+        else return res.status(403).send({msg: 'Restricted route'});
+    }catch(error){
+        console.log('Error while authorizing admin');
+        console.log(error);
+        handleError(req, res, next, error);
+    }
+}
