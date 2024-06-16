@@ -1,5 +1,5 @@
 import {createClient} from 'redis';
-import { CART_KEY_NAME } from '../../utilities/constants';
+import { CART_COLLECTION_NAME } from '../../utilities/constants';
 
 const connectionURL = `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
 
@@ -20,8 +20,8 @@ export async function connect(): Promise<Boolean> {
 
 async function intiCache(): Promise<Boolean>{
     try{
-        let exists = await global.redisConnection.sendCommand(['EXISTS', CART_KEY_NAME]);
-        if(!exists) await global.redisConnection.sendCommand(['JSON.SET', CART_KEY_NAME, '.', '{}']);
+        let exists = await global.redisConnection.sendCommand(['EXISTS', CART_COLLECTION_NAME]);
+        if(!exists) await global.redisConnection.sendCommand(['JSON.SET', CART_COLLECTION_NAME, '.', '{}']);
         console.log('Cache initialization successful');
         return true;
     }catch(error: any){

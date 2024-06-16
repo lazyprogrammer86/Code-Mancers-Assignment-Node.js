@@ -14,8 +14,14 @@ authAPI.post('/register', async (req :Request, res: Response, next: NextFunction
         let requestBody: RegistrationBody = req.body;
         
         if(!requestBody.email || !requestBody.password) return res.status(400).send({msg: 'Required credentials are missing'});
-        
-        let hashResult = await createHash(requestBody.password);
+
+        let userExists = await getDoc(USER_COLLECTION_NAME, [{email: requestBody.email}]);
+
+        if(userExists.code != 1) return res.status(500).send({msg:userExists.info});       
+
+        if(userExists.info) return res.status(409).send({msg: 'User already registered'});
+
+        let hashResult = createHash(requestBody.password);
         if(hashResult.code != 1) return res.status(500).send({msg: 'Error while creating hash'});
         requestBody.password = hashResult.info;
         requestBody.userId = UUID.v4();

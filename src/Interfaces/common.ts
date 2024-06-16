@@ -26,3 +26,13 @@ interface cartRequestBody{
 interface cartResponse extends productBody{
     count: number
 }
+
+interface toEmail{
+    email: string
+    name: string
+}
+
+interface attachemnt {
+    fileName: string
+    path: string
+}

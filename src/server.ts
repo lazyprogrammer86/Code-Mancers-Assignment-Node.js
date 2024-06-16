@@ -6,6 +6,7 @@ import { produtctAPI } from './api/productAPI';
 import { cartAPI } from './api/cartAPI';
 import { notFound } from './middleware/notFound';
 import { handleAuth } from './middleware/authHandler';
+import { intializeMailer } from './controllers/mailer';
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(notFound);
 async function initialize(): Promise<void>{
     // env variables
     dotenv.config({path: './server.properties'});
+    dotenv.config({path: './email.properties'});
     
     /**Initialize mongo db connection */
     const {connect: mongoConnection} = require('./db/mongodb/connection');
@@ -50,14 +52,11 @@ async function initialize(): Promise<void>{
         process.exit(1);
     }
     
-    /**Initialize redis connection */
-    // const {connect: redisConnection} = require('./db/redis/connection');
-    // let redisConnected: Boolean = await redisConnection();
-    // if(!redisConnected){
-    //     console.log('Server can not be started, due to error in redis connection');
-    //     process.exit(1);
-    // }
-
+    /**Initialize email service */
+    if(!intializeMailer()){
+        console.log('Server can not be started, due to error in mailer initilization');
+        process.exit(1);
+    }
     return;
 }
 

@@ -2,6 +2,7 @@ import {Router, Request, Response, NextFunction} from 'express';
 import { handleError } from '../middleware/errorHandler';
 import { CART_COLLECTION_NAME, ORDER_COLLECITON_NAME, PRODUCT_COLLECTION_NAME } from '../utilities/constants';
 import { deleteDoc, getDoc, insertDoc, lookupDoc, updateDoc } from '../db/mongodb/controller';
+import { sendOrderMail } from '../controllers/sendMail';
 
 export const cartAPI = Router();
 
@@ -64,11 +65,10 @@ cartAPI.post('/cart/checkout', async(req: Request, res: Response, next: NextFunc
         } 
 
         let orderResponse = await insertDoc(ORDER_COLLECITON_NAME, {products:productIds, totalPrice, userId: req.authInfo!.userId, address});
-
+        
         if(orderResponse.code != 1) return res.status(500).send({msg: orderResponse.info});
-        // sendOrderEmail(req.authInfo!.email, response.info[0].cartItems);
         deleteDoc(CART_COLLECTION_NAME, {userId: req.authInfo!.userId});
-
+        sendOrderMail({email: req.authInfo!.email, name: req.authInfo!.username}, response.info[0].cartItems, totalPrice);
         return res.status(200).send({msg: "Successfully placed order"});
     }catch(error){
         console.log('Error while checking out cart');
