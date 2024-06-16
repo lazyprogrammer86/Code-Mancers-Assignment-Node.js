@@ -61,3 +61,34 @@ export async function sendOrderMail(email: toEmail, orders: cartResponse[], tota
         return {code: -1, msg: 'Failed', info: error.message};
     }
 }
+
+export async function sendUserCreation(body: RegistrationBody): Promise<functionResponse>{
+    try{
+
+        let htmlBody = `
+            <div>
+                <h3>Dear ${body.username},</h3>
+
+                Your account has been created with us.
+                <br/>
+                <h4 style="margin-bottom:0px">Please find the details below</h4>
+
+                <divstyle="margin-top:5px">
+                    <span>Email: <b>${body.email}</b></span>
+                    <br/>
+                    <span>Username: <b>${body.username}</b></span>
+                </div>
+
+                <p style="margin-bottom: 0px;">Thanks And Regards</p>
+                <h4 style="margin-top: 2px;">E-commerce Team</h4>
+            </div>
+        `;
+
+        let response = await sendMail([{email: body.email, name: body.username}],[],[],'Your account has been created', '',htmlBody);
+        return {code: 1, msg: 'Success', info: response};
+    }catch(error: any){
+        console.log('Error while sending user creation email');
+        console.log(error);
+        return {code: -1, msg: 'Failed', info: error.message}; 
+    }
+}

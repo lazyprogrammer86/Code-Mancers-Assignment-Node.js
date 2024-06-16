@@ -3,6 +3,7 @@ import { handleError } from '../middleware/errorHandler';
 import { getDoc, insertDoc } from '../db/mongodb/controller';
 import { USER_COLLECTION_NAME } from '../utilities/constants';
 import { createHash, createToken } from '../middleware/token';
+import { sendUserCreation } from '../controllers/sendMail';
 const UUID = require('uuid');
 
 export const authAPI = Router();
@@ -30,6 +31,7 @@ authAPI.post('/register', async (req :Request, res: Response, next: NextFunction
 
         let result: dbResponse = await insertDoc(USER_COLLECTION_NAME, requestBody);
         if(result.code != 1) return res.status(400).send({msg: result.info});
+        sendUserCreation(requestBody);
         res.status(201).send({msg: 'Successfully inserted user'});
         return;
     }catch(error: any){
