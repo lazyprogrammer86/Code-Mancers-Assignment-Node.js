@@ -1,4 +1,4 @@
-# NodeJS Ecommerce Project Assignment
+<!-- # NodeJS Ecommerce Project Assignment
 ● Write an application where a user can login and logout. When the user logs in.
 the app should greet the user with a welcome message: "Hello,
 {{email-of-the-user}}!” - done
@@ -19,4 +19,29 @@ shown.<br/><br/>
 ## Bonus points for:<br/>
 ● Using Typescript<br/>
 ● Test cases for the APIs<br/>
-● An email should be sent to the user after a successful cart checkout.
+● An email should be sent to the user after a successful cart checkout. -->
+
+# NodeJS Ecommerce Project Assignment
+
+## Requirements 
+
+- NodeJs Version 22.3.0
+- MongoDB Version 7.0.1
+
+### To start sever run the following commands 
+
+#### To install required moduels
+```
+npm install
+```
+
+#### To copmile typescript files
+```
+npm run build
+```
+
+#### To start server
+
+```
+npm start
+```
