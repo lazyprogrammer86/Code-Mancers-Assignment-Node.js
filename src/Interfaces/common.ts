@@ -17,3 +17,12 @@ interface productBody{
     description: string
     price: number
 }
+
+interface cartRequestBody{
+    productId: string
+    count: number
+};
+
+interface cartResponse extends productBody{
+    count: number
+}

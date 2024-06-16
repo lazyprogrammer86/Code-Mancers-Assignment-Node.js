@@ -2,7 +2,8 @@ import express, { Request, Response, Router } from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
 import { authAPI } from './api/authAPI';
-import { produtctAPI } from './api/products';
+import { produtctAPI } from './api/productAPI';
+import { cartAPI } from './api/cartAPI';
 import { notFound } from './middleware/notFound';
 import { handleAuth } from './middleware/authHandler';
 
@@ -22,7 +23,7 @@ app.get('/', (req: Request, res: Response) : void => {
 });
 
 /**Routes Inclusion */
-const protectedRoutes: Router[] = [produtctAPI];
+const protectedRoutes: Router[] = [produtctAPI, cartAPI];
 const unProtectedRoutes: Router[] = [authAPI];
 
 /**Unprotected routes */
@@ -50,12 +51,12 @@ async function initialize(): Promise<void>{
     }
     
     /**Initialize redis connection */
-    const {connect: redisConnection} = require('./db/redis/connection');
-    let redisConnected: Boolean = await redisConnection();
-    if(!redisConnected){
-        console.log('Server can not be started, due to error in redis connection');
-        process.exit(1);
-    }
+    // const {connect: redisConnection} = require('./db/redis/connection');
+    // let redisConnected: Boolean = await redisConnection();
+    // if(!redisConnected){
+    //     console.log('Server can not be started, due to error in redis connection');
+    //     process.exit(1);
+    // }
 
     return;
 }

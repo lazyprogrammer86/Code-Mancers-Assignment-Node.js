@@ -76,8 +76,9 @@ produtctAPI.get('/product/get', async(req: Request, res: Response, next: NextFun
     try{ 
         let {productId} = req.query;
         let parameters: any = [];
-        if(productId) parameters.push({productId});
-
+        if(Array.isArray(productId)) parameters.push({productId: {"$in" : productId}});
+        else if(productId) parameters.push({productId});
+        
         let getProductResult = await getDocs(PRODUCT_COLLECTION_NAME, parameters);
 
         if(getProductResult.code != 1) return res.status(500).send({msg: getProductResult.info});
