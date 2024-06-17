@@ -68,7 +68,7 @@ cartAPI.post('/cart/checkout', async(req: Request, res: Response, next: NextFunc
         
         if(orderResponse.code != 1) return res.status(500).send({msg: orderResponse.info});
         deleteDoc(CART_COLLECTION_NAME, {userId: req.authInfo!.userId});
-        sendOrderMail({email: req.authInfo!.email, name: req.authInfo!.username}, response.info[0].cartItems, totalPrice);
+        sendOrderMail({email: req.authInfo!.email, name: req.authInfo!.username}, response.info[0].cartItems, totalPrice, address);
         return res.status(200).send({msg: "Successfully placed order"});
     }catch(error){
         console.log('Error while checking out cart');

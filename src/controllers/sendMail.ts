@@ -1,6 +1,6 @@
 import {sendMail} from './mailer';
 
-export async function sendOrderMail(email: toEmail, orders: cartResponse[], totalPrice: number): Promise<functionResponse>{
+export async function sendOrderMail(email: toEmail, orders: cartResponse[], totalPrice: number, address: string): Promise<functionResponse>{
     try{
         let htmlBody = `
             <div>
@@ -30,6 +30,9 @@ export async function sendOrderMail(email: toEmail, orders: cartResponse[], tota
                     TABLE_CONTENT
                 </table>
                 
+                <br>
+                And will be devlivered to the address below <br/>
+                <p>${address}</p>
 
                 <br/>
                 <p> The total price of the order is <b>${totalPrice}</p>

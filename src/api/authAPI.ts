@@ -61,7 +61,7 @@ authAPI.post('/login', async (req :Request, res: Response, next: NextFunction): 
         if(tokenResult.code != 1) return res.status(500).send({msg: tokenResult.info});
 
         res.setHeader('Authorization', `Bearer ${tokenResult.info}`);
-        res.status(200).send({msg: `Hello ${email}`, token: `Bearer ${tokenResult.info}`});
+        res.status(200).send({msg: `Hello ${email}`, token: `Bearer ${tokenResult.info}`, isAdmin: isAdmin});
         return;
     }catch(error: any){
         console.log('Error while registering user');
