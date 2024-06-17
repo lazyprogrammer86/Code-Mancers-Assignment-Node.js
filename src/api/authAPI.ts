@@ -26,7 +26,7 @@ authAPI.post('/register', async (req :Request, res: Response, next: NextFunction
         if(hashResult.code != 1) return res.status(500).send({msg: 'Error while creating hash'});
         requestBody.password = hashResult.info;
         requestBody.userId = UUID.v4();
-        if(requestBody.email === 'adarshnayak86@gmail.com') requestBody.isAdmin = true;
+        if(process.env.SUPER_ADMIN_EMAILS?.split(',').includes(requestBody.email)) requestBody.isAdmin = true;
         else requestBody.isAdmin = false;
 
         let result: dbResponse = await insertDoc(USER_COLLECTION_NAME, requestBody);
