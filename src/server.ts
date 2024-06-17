@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
+import cors from 'cors';
 import { authAPI } from './api/authAPI';
 import { produtctAPI } from './api/productAPI';
 import { cartAPI } from './api/cartAPI';
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cors({origin: '*'}));
 
 /**global variables */
 global.mongodbConnection = null;

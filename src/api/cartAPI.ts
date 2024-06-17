@@ -1,7 +1,7 @@
 import {Router, Request, Response, NextFunction} from 'express';
 import { handleError } from '../middleware/errorHandler';
 import { CART_COLLECTION_NAME, ORDER_COLLECITON_NAME, PRODUCT_COLLECTION_NAME } from '../utilities/constants';
-import { deleteDoc, getDoc, insertDoc, lookupDoc, updateDoc } from '../db/mongodb/controller';
+import { deleteDoc, insertDoc, lookupDoc, updateDoc } from '../db/mongodb/controller';
 import { sendOrderMail } from '../controllers/sendMail';
 
 export const cartAPI = Router();
@@ -30,8 +30,8 @@ cartAPI.get('/cart/get', async (req: Request, res: Response, next: NextFunction)
         let response = await lookupDoc(CART_COLLECTION_NAME, PRODUCT_COLLECTION_NAME, {userId: req.authInfo!.userId});
 
         if(response.code != 1) return res.status(500).send({msg: response.info});
-        if(!response.info || !response.info[0] || !response.info[0].cartItems) return res.status(204).send();
-        return res.status(200).send({msg: response.info[0]?.cartItems});
+        if(!response.info || !response.info[0] || !response.info[0].cartItems) return res.status(200).send([]);
+        return res.status(200).send(response.info[0]?.cartItems);
     }catch(error: any){
         console.log('Error while inserting products to cart');
         console.log(error);

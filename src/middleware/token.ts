@@ -15,7 +15,7 @@ export function createHash(text: string): functionResponse{
 
 export function createToken(doc: tokenInfo): functionResponse {
     try{
-        let token: string = jwt.sign({...doc}, TOKEN_SECRET, {expiresIn: '24h'});
+        let token: string = jwt.sign({...doc}, TOKEN_SECRET);
         return {code: 1, msg: 'Success', info: token};
     }catch(error: any){
         console.log('Error while creating token');
