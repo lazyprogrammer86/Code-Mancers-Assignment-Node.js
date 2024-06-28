@@ -29,7 +29,7 @@ produtctAPI.post('/product/insert', adminHandle, async(req: Request, res: Respon
 });
 
 /**Update product */
-produtctAPI.patch('/product/update', adminHandle, async(req: Request, res: Response, next: NextFunction) : Promise<Response | void> => {
+produtctAPI.put('/product/update', adminHandle, async(req: Request, res: Response, next: NextFunction) : Promise<Response | void> => {
     try{
         let {productId} = req.query;
         let requestBody = req.body;
